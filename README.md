@@ -1,8 +1,4 @@
 # AudioOptimizerPlugin
-Example kernel extension to flatten speaker response
-
-
-# AudioOptimizerPlugin
 
 AudioOptimizerPlugin is a macOS kernel extension which flattens the frequency response of my Audioengine A2+ speakers.
 It could be considered a modern version of Apple's [SampleUSBAudioPlugin](https://developer.apple.com/library/content/samplecode/SampleUSBAudioPlugin)
