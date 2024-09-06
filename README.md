@@ -23,7 +23,10 @@ Sadly, there is no concept of **auto stop**.
 ## Usage
 
 Unlike the [original version](https://github.com/iccir/AudioOptimizerPlugin/releases/tag/OriginalVersion),
-this version doesn't hardcoded biquadratic coefficients.
+this version doesn't use hardcoded biquadratic coefficients.
+
+You will need to provide coefficient data after system boot. You may also change coefficients while audio
+is playing.
 
 Find the `IccirOptimizerAudioPlugin` entry for the corresponding device in the `IOService` plane,
 then use `IORegistryEntrySetCFProperty` to set the `BiquadsData` and `BiquadsEnabled` properties.
