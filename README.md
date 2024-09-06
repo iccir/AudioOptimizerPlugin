@@ -6,16 +6,24 @@ project from 2004.
 
 All files except for `AppleUSBAudioPlugin.h` are dedicated to the public domain.
 
+As of 2024, `IOAudio*` and kernel extensions are deprecated. That said, this still works 
+in macOS Sonoma 14.6.1.
+
+## Why not use AudioTap?
+
+Sonoma introduced the concept of 
+[system-wide audio taps](https://developer.apple.com/documentation/coreaudio/capturing_system_audio_with_core_audio_taps?language=objc).
+In theory, this allow for system-wide equalizers ([see example code](https://gist.github.com/iccir/952b5de5579d22ed6d6e645f2122f5b7)).
+Unfortuately, inter-process communication added a constant overhead of around ~2% CPU use from `coreaudiod`,
+even when no audio is playing.
+
+This is halfway solved by the `kAudioAggregateDeviceTapAutoStartKey` key.
+Sadly, there is no concept of **auto stop**.
 
 ## Usage
 
-1. Use [FuzzMeasure](https://www.rodetest.com) or [REW](https://www.roomeqwizard.com) with a calibrated microphone like
-the [UMIK-1](https://www.minidsp.com/products/acoustic-measurement/umik-1) to measure the frequency response
-of your speakers and room.
-2. Import the frequency response into REW.
-3. Use REW's EQ tool to build a list of peaking filters for correction.
-4. Export these filters as a text file.
-5. Modify `OptimizerSettings.h` with the values from #4.
-6. Change `idProduct` and `idVendor` in `Info.plist` to match your speakers.
-7. Change `vendorID` and `productID` in `IccirAudioOptimizerPlugin::pluginInit` 
-8. Build, install in `/Library/Extensions`, enjoy!
+Unlike the [original version](https://github.com/iccir/AudioOptimizerPlugin/releases/tag/OriginalVersion),
+this version doesn't hardcoded biquadratic coefficients.
+
+Find the `IccirOptimizerAudioPlugin` entry for the corresponding device in the `IOService` plane,
+then use `IORegistryEntrySetCFProperty` to set the `BiquadsData` and `BiquadsEnabled` properties.
